@@ -29,6 +29,29 @@
 
     <build>
         <plugins>
+
+            <!-- 清空目标插件目录（构建最开始执行） -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>clean-plugin-directory</id>
+                        <phase>initialize</phase> <!-- 最早执行阶段 -->
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <!-- dir 不存在时自动跳过，不会报错 -->
+                                <delete dir="${project.basedir}/../../plugins/${project.artifactId}" />
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
             <!-- 将构建结果输出到 plugins 目录下-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

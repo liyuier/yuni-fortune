@@ -1,0 +1,19 @@
+{
+  "module_id": "fortune",
+  "module_name": "今日运势",
+  "plugins": [
+    {
+      "id": "Fortune",
+      "name": "今日运势",
+      "version": "0.0.1",
+      "description": "少女祈祷中……",
+      "tips": [
+        "向群聊发送 `/运势` ，查看自己今天的运势",
+        "一天内重复查看，运势不变"
+      ],
+      "author": "Yuier me@yuier.com",
+      "dependencies": [],
+      "default_enable": true
+    }
+  ]
+}
