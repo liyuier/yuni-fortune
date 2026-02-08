@@ -1,0 +1,88 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- 父模块中以 dependencyManagement 引入了统一依赖管理，因此后边无需再次引入。
+         直接声明 dependencies 即可 -->
+    <parent>
+        <groupId>com.yuier.yuni</groupId>
+        <artifactId>yuni3</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
+    <!-- 模块信息 -->
+    <artifactId>fortune</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>fortune</name>
+    <description>fortune</description>
+
+    <dependencies>
+
+        <!-- 引入其他子模块 -->
+        <dependency>
+            <groupId>com.yuier.yuni</groupId>
+            <artifactId>yuni-plugin</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- 将构建结果输出到 plugins 目录下-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-plugin-jar</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>${project.groupId}</groupId>
+                                    <artifactId>${project.artifactId}</artifactId>
+                                    <version>${project.version}</version>
+                                    <outputDirectory>../../plugins/${project.artifactId}</outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- 复制资源文件到 plugins 目录 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <!-- 移除默认的绑定到 process-resources 的 execution -->
+                    <execution>
+                        <id>default-resources</id>
+                        <phase>none</phase>
+                    </execution>
+                    <execution>
+                        <id>copy-resources-to-plugins</id> <!-- 给这个执行步骤一个唯一的 ID -->
+                        <phase>process-resources</phase> <!-- 绑定到 process-resources 阶段 -->
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>../../plugins/${project.artifactId}</outputDirectory> <!-- 目标目录 -->
+                            <resources>
+                                <resource>
+                                    <directory>src/main/resources</directory> <!-- 源目录 -->
+                                </resource>
+                            </resources>
+                            <!-- 关闭 Maven 属性过滤 -->
+                            <useDefaultDelimiters>false</useDefaultDelimiters>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
