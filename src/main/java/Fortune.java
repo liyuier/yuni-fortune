@@ -53,7 +53,7 @@ public class Fortune extends CommandPlugin {
         if (RedisUtil.exists(FORTUNE_TODAY_CACHE_KEY)) {
             Map<String, String> fortuneTodayMap = (Map<String, String>) RedisUtil.get(FORTUNE_TODAY_CACHE_KEY);
             if (fortuneTodayMap != null && fortuneTodayMap.containsKey(userId.toString())) {
-                FortuneTodayCache fortuneTodayCache = PluginUtils.serialize(fortuneTodayMap.get(userId.toString()), FortuneTodayCache.class);
+                FortuneTodayCache fortuneTodayCache = PluginUtils.deserialize(fortuneTodayMap.get(userId.toString()), FortuneTodayCache.class);
                 assert fortuneTodayCache != null;
                 if (LocalDate.now().toString().equals(fortuneTodayCache.getDate())) {
                     eventContext.getChatSession().reply(new MessageChain("你今天已经抽取过运势，结果如下: \n").addAll(buildFortuneMessage(fortuneTodayCache)));
@@ -94,11 +94,15 @@ public class Fortune extends CommandPlugin {
             eventContext.getChatSession().response(new MessageChain("逢凶化吉！已为你将运势替换为姬吉！\n")
                     .addAll(buildFortuneMessage(fortuneTodayCache))
                     .addReply(String.valueOf(sendMessage.getMessageId())));
+            // 缓存起来
+            Map<String, String> pigTodayMap = (Map<String, String>) RedisUtil.get(FORTUNE_TODAY_CACHE_KEY);
+            pigTodayMap.put(userId.toString(), PluginUtils.serialize(fortuneTodayCache));
+            RedisUtil.set(FORTUNE_TODAY_CACHE_KEY, pigTodayMap);
             return;
         }
         // 缓存起来
         Map<String, String> pigTodayMap = (Map<String, String>) RedisUtil.get(FORTUNE_TODAY_CACHE_KEY);
-        pigTodayMap.put(userId.toString(), PluginUtils.deserialize(fortuneTodayCache));
+        pigTodayMap.put(userId.toString(), PluginUtils.serialize(fortuneTodayCache));
         RedisUtil.set(FORTUNE_TODAY_CACHE_KEY, pigTodayMap);
     }
 
@@ -189,8 +193,8 @@ public class Fortune extends CommandPlugin {
                     + (slices - 2) * textFontSize / 2.0
                     + (slices - 1) * 4
                     - i * (textFontSize + 4));
-            // 计算列的垂直起始位置（居中），这里向下微调 20 像素
-            int yStart = textCenter[1] - fontHeight / 2 + 20;
+            // 计算列的垂直起始位置（居中），这里向下微调 22 像素
+            int yStart = textCenter[1] - fontHeight / 2 + 22;
 
             // 逐字符绘制竖排文字（Java无直接换行竖排，需手动逐字符绘制）
             for (int j = 0; j < colText.length(); j++) {

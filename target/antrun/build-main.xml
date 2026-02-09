@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project name="maven-antrun-" default="main">
-  <target name="main">
-    <delete dir="F:\Codes\Create\QQBot\Yuni3\dev\Yuni3\plugin-repo\fortune/../../plugins/fortune" />
-  </target>
-</project>
