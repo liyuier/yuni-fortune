@@ -65,7 +65,7 @@ public class Fortune extends CommandPlugin {
             RedisUtil.set(FORTUNE_TODAY_CACHE_KEY, new HashMap<String, String>());
         }
         // 缓存里没有，或者已经过期，本地取一下
-        List<PrincessFortune> princessFortuneList = Arrays.asList(PluginUtils.loadJsonConfigFromPlugin("special/pcr.json", PrincessFortune[].class, this));
+        List<PrincessFortune> princessFortuneList = Arrays.asList(PluginUtils.loadJsonConfigFromPlugin("special/pcr.json", PrincessFortune[].class, this.getClass()));
         PrincessFortune princessFortune = PluginUtils.getRandomElement(princessFortuneList);
         // 背景图
         String background = PluginUtils.getRandomElement(princessFortune.getBackgrounds());
@@ -135,7 +135,7 @@ public class Fortune extends CommandPlugin {
         Integer commentFontSize = 25;
         Font titleFont = PluginUtils.loadFontFromPlugin(this, "font/Mamelon.otf", titleFontSize);
         Font textFont = PluginUtils.loadFontFromPlugin(this, "font/sakura.ttf", commentFontSize);
-        Path imgPath = Paths.get(PluginUtils.getPluginRootPath(this),  "img", fortuneTodayCache.getBackground());
+        Path imgPath = Paths.get(PluginUtils.getPluginRootPath(this.getClass()),  "img", fortuneTodayCache.getBackground());
         // 背景图片
         BufferedImage img = null;
         try {
