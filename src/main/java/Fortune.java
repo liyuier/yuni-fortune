@@ -133,8 +133,8 @@ public class Fortune extends CommandPlugin {
         // 字体
         Integer titleFontSize = 45;
         Integer commentFontSize = 25;
-        Font titleFont = PluginUtils.loadFontFromPlugin(this, "font/Mamelon.otf", titleFontSize);
-        Font textFont = PluginUtils.loadFontFromPlugin(this, "font/sakura.ttf", commentFontSize);
+        Font titleFont = PluginUtils.loadFontFromPlugin("font/Mamelon.otf", titleFontSize, Fortune.class);
+        Font textFont = PluginUtils.loadFontFromPlugin("font/sakura.ttf", commentFontSize, Fortune.class);
         Path imgPath = Paths.get(PluginUtils.getPluginRootPath(this.getClass()),  "img", fortuneTodayCache.getBackground());
         // 背景图片
         BufferedImage img = null;
